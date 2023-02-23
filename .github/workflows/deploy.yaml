@@ -26,9 +26,4 @@ jobs:
       - name: Deploy to Production
         run: |
           # Deployment commands go here
-      - name: Wait for Approval
-        if: ${{ github.event_name == 'push' }}
-        uses: technote-space/wait-for-approval@v2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
