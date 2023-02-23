@@ -43,6 +43,9 @@ jobs:
       - name: Push Docker Image to Docker Hub
         run: docker push salras/my-image
   read-dev:
+    permissions:
+      id-token: write # need this for OIDC
+      contents: read
     runs-on: ubuntu-latest
     environment: pre-prod
 
