@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: pre-prod
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
       - name: Build Application
         run: npm run build
       - name: Deploy to GitHub Pages
