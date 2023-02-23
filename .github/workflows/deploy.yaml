@@ -1,9 +1,6 @@
 name: Build and Deploy
 
-on:
-  push:
-    branches:
-      - master
+on: [push]
 
 jobs:
   build:
@@ -31,8 +28,5 @@ jobs:
         run: |
           # Deployment commands go here
       - name: Wait for Approval
-        if: ${{ github.event_name == 'push' }}
-        uses: technote-space/wait-for-approval@v2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+
 
