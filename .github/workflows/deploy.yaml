@@ -58,7 +58,8 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.READ_ROLE }}
           role-session-name: OIDCSession
-      - run: hostname
+      - run: aws ec2-instance-connect send-command --instance-id i-0e1e938e34e31d717 --document-name "AWS-RunShellScript" --parameters "commands=['sudo docker run -d ngnix']"
+
 
  
 
