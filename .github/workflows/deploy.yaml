@@ -4,6 +4,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: pre-prod
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
