@@ -42,6 +42,8 @@ jobs:
             salras/my-image:${{ github.sha }}
       - name: Push Docker Image to Docker Hub
         run: docker push salras/my-image
+      - name: Run Docker Image
+        run: docker run -p 80:80 salras/my-image:latest
 
 
 
