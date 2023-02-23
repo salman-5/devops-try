@@ -1,7 +1,6 @@
 name: Build and Deploy
 
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,6 +26,5 @@ jobs:
       - name: Deploy to Production
         run: |
           # Deployment commands go here
-      - name: Wait for Approval
 
 
