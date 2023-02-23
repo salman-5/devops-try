@@ -44,6 +44,8 @@ jobs:
         run: docker push salras/my-image
   read-dev:
     runs-on: ubuntu-latest
+    environment: pre-prod
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
