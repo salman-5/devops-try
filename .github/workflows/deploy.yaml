@@ -58,6 +58,8 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.READ_ROLE }}
           role-session-name: OIDCSession
+      - run: hostname
+
  
 
 
