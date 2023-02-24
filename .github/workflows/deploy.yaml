@@ -58,8 +58,9 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.READ_ROLE }}
           role-session-name: OIDCSession
-      - run: aws ssm send-command --instance-id i-0e1e938e34e31d717 --document-name "AWS-RunShellScript" --parameters "commands=['docker run -d ngnix']"
-
+      - run: |
+          ssh github@44.202.129.85
+          hostname
 
 
  
