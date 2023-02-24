@@ -53,15 +53,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-region: us-east-1
-          role-to-assume: ${{ secrets.READ_ROLE }}
-          role-session-name: OIDCSession
-      - run: |
-          ssh github@44.202.129.85
-          hostname
-
+        run: ssh github@44.202.129.85
+          
 
  
 
