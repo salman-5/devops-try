@@ -1,8 +1,8 @@
-name: Build and Deploy
+name: Build Test & Deploy
 
 on: [push]
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
     environment: pre-prod
     steps:
@@ -20,8 +20,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build-and-push-image:
-    needs: build
+  build-and-push-docker-image:
+    needs: build-test
     runs-on: ubuntu-latest
     environment: pre-prod
     steps:
@@ -42,9 +42,10 @@ jobs:
             salras/my-image:${{ github.sha }}
       - name: Push Docker Image to Docker Hub
         run: docker push salras/my-image
-  read-dev:
+  deploy-to-pre-prod:
+    needs: build-and-push-docker-image
     permissions:
-      id-token: write # need this for OIDC
+      id-token: write 
       contents: read
     runs-on: ubuntu-latest
     environment: pre-prod
