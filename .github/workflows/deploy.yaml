@@ -59,6 +59,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           role-to-assume: ${{ secrets.EC2_ROLE }}
           aws-region: us-east-1
+          role-duration-seconds: 12000
+
       - run: aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["i-0e1e938e34e31d717"]}]' --parameters '{"commands":["#! /bin/bash","docker stop react-app","docker rm react-app","","docker rmi salras/my-image:latest","docker pull salras/my-image:latest","","docker run -t -d -p 80:80 --name react-app salras/my-image:latest"],"workingDirectory":["/home/ubuntu"],"executionTimeout":["3600"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --region us-east-1
 
  
