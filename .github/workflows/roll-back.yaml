@@ -13,5 +13,5 @@ jobs:
           fetch-depth: '5'
       - name: Rollback on failure
         run: |
-          git revert -m 1 --no-edit HEAD~1
+          git revert -m 1 --no-edit HEAD
           git push
