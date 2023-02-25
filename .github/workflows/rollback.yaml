@@ -2,15 +2,11 @@ name: My Workflow
 
 on:
   workflow_dispatch:
-      inputs:
-        environment:
 
 jobs:
-
   approve:
     runs-on: ubuntu-latest
 
-    if: github.event.inputs.deploy == 'true'
     steps:
       - name: Request approval
         uses: peter-evans/create-pull-request@v3
