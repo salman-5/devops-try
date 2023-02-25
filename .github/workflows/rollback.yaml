@@ -2,16 +2,10 @@ name: My Workflow
 
 on:
   workflow_dispatch:
-    inputs:
-      deploy:
-        description: 'Deploy to production'
+      inputs:
+        environment:
 
 jobs:
-
-
-
-
-
 
   approve:
     runs-on: ubuntu-latest
