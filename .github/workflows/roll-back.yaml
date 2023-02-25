@@ -11,20 +11,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: '5'
-      - name: Get commit hash
-        run: echo "::set-output name=commit::$(git rev-parse HEAD)"
-        id: commit
-
       - name: Rollback on failure
         run: |
-          git revert --no-edit ${commit}
+          git revert -m 1 --no-edit HEAD~1
           git push
-
-      - name: Request approval
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: "Deploy to ${{ matrix.environment }}: Approval required"
-          labels: "approval required, ${{ matrix.environment }}"
-          body: |
-            @${{ github.actor }} Please review and approve this deployment to ${matrix.environment}.
-          reviewers: ${{ secrets.REVIEWERS }}
