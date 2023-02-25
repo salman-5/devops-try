@@ -9,8 +9,6 @@ jobs:
 
     steps:
         uses: actions/checkout@v3
-        with: 
-          fetch-depth: 5
       - run: git revert HEAD~1 
       - name: Request approval
         uses: peter-evans/create-pull-request@v3
