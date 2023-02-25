@@ -1,18 +1,14 @@
 name: My Workflow
 
-on:
-  workflow_dispatch:
+on: [push]
 
 jobs:
   approve:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Request approval
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: "Deploy to ${{ matrix.environment }}: Approval required"
-          labels: "approval required, ${{ matrix.environment }}"
-          body: |
-            @${{ github.actor }} Please review and approve this deployment to ${matrix.environment}.
-          reviewers: ${{ secrets.REVIEWERS }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: git revert HEAD~1 
+
+
