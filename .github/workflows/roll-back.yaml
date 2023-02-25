@@ -12,6 +12,8 @@ jobs:
         with:
           fetch-depth: '5'
       - name: Rollback on failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git revert -m 1 --no-edit HEAD
           git push
