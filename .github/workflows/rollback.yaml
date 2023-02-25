@@ -1,0 +1,39 @@
+name: My Workflow
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to production'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Add build steps here
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    strategy:
+      matrix:
+        environment: [production, staging]
+
+    steps:
+      # Add deployment steps here
+
+  approve:
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: github.event.inputs.deploy == 'true'
+    steps:
+      - name: Request approval
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Deploy to ${{ matrix.environment }}: Approval required"
+          labels: "approval required, ${{ matrix.environment }}"
+          body: |
+            @${{ github.actor }} Please review and approve this deployment to ${matrix.environment}.
+          reviewers: ${{ secrets.REVIEWERS }}
