@@ -61,6 +61,48 @@ jobs:
       - name: Connect to EC2 instance
         run: |
             aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["i-0e1e938e34e31d717"]}]' --parameters '{"workingDirectory":["/home/ubuntu"],"executionTimeout":["3600"],"commands":["#! /bin/bash","docker stop react-app","docker rm react-app","","docker rmi salras/my-image:latest","docker pull salras/my-image:latest","","docker run -t -d -p 80:80 --name react-app salras/my-image:latest"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --region us-east-1
+  rollback:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and test
+        run: |
+          npm install
+      - name: Manual rollback approval
+        if: success()
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Manual rollback approval"
+          file_pattern: "rollback_approval.txt"
+          branch: "main"
+
+      - name: Rollback on approval
+        if: github.ref == 'refs/heads/main' && env.APPROVED_ROLLBACK == 'true'
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const { data: commits } = await github.rest.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              per_page: 2
+            });
+
+            const [previousCommit] = commits.slice(1);
+
+            const rollbackMessage = `Rolling back commit ${previousCommit.sha}`;
+
+            await github.rest.repos.createCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              message: rollbackMessage,
+              tree: previousCommit.commit.tree.sha,
+              parents: [context.sha],
+              });
+
 
 
 
