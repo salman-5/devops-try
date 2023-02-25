@@ -57,7 +57,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.EC2_ROLE }}
           aws-region: us-east-1
-      - run: aws ssm send-command --instance-id i-0e1e938e34e31d717 --document-name "AWS-RunShellScript" --parameters "commands=[' docker run -d -p 80:80 salras/my-image']"
+      - run: aws ssm send-command --instance-id i-0e1e938e34e31d717 --document-name "AWS-RunShellScript" --parameters "commands=['docker container ps']"
 
 
  
