@@ -6,25 +6,15 @@ on:
 jobs:
   approve:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: '5'
-      - name: Get commit hash
-        run: echo "::set-output name=commit::$(git rev-parse HEAD)"
-        id: commit
-
-      - name: Rollback on failure
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Revert PR
         run: |
-          git revert --no-edit ${commit}
-          git push
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git checkout -b revert-pr-${{ github.event.pull_request.number }} master
+          git revert -m 1 ${{ github.event.pull_request.head.sha }}
+          git push --set-upstream origin revert-pr-${{ github.event.pull_request.number }}
 
-      - name: Request approval
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: "Deploy to ${{ matrix.environment }}: Approval required"
-          labels: "approval required, ${{ matrix.environment }}"
-          body: |
-            @${{ github.actor }} Please review and approve this deployment to ${matrix.environment}.
-          reviewers: ${{ secrets.REVIEWERS }}
