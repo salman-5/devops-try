@@ -62,10 +62,10 @@ jobs:
           role-duration-seconds: 1200
           role-session-name: MySessionName
 
+      - name: Connect to EC2 instance
+        run: |
+            aws ssm start-session --target i-0e1e938e34e31d717 --region us-east-1
 
-      - run: aws ssm start-session --target i-0e1e938e34e31d717 --region us-east-1
-
- 
 
 
 
