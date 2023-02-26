@@ -17,7 +17,7 @@ jobs:
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          git revert -m 1 -edit "${{ github.event.inputs.reason }}" HEAD
+          git revert -m 1 --edit "${{ github.event.inputs.reason }}" HEAD
           git push 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
