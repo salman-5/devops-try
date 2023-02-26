@@ -6,15 +6,14 @@ on:
 jobs:
   approve:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+            fetch-depth: '5'
       - name: Revert PR
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          git checkout -b revert-pr-${{ github.event.pull_request.number }} master
-          git revert -m 1 ${{ github.event.pull_request.head.sha }}
-          git push --set-upstream origin revert-pr-${{ github.event.pull_request.number }}
-
+          git revert -m 1 HEAD
+          git push 
