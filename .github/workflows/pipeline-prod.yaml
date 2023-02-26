@@ -26,6 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
   deploy-to-production:
+    needs: create_pr
     permissions:
       id-token: write 
       contents: read
