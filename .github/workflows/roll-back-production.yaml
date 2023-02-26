@@ -1,10 +1,29 @@
-name: Deployment to Production
+name: Roll Back and Deploy to Production
+
 on:
-  push:
-    branches: 
-      master
+  workflow_dispatch:
+    inputs:
+      reason:        
+        description: 'Reason for roll back'
+        required: true
+
 jobs:
-  deploy-to-production:
+  roll-back-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+            fetch-depth: '5'
+      - name: Revert PR
+        run: |
+          gh revert -m 1 HEAD
+          gh commit -m "${{ github.event.inputs.reason }}"
+          gh push 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+ deploy-to-production:
     permissions:
       id-token: write 
       contents: read
@@ -37,4 +56,3 @@ jobs:
       - name: Connect to EC2 instance
         run: |
             aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["i-0e1e938e34e31d717"]}]' --parameters '{"workingDirectory":["/home/ubuntu"],"executionTimeout":["3600"],"commands":["#! /bin/bash","docker stop react-app","docker rm react-app","","docker rmi salras/my-image:latest","docker pull salras/my-image:latest","","docker run -t -d -p 80:80 --name react-app salras/my-image:latest"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --region us-east-1
-
