@@ -1,0 +1,19 @@
+name: Pipeline Production
+on:
+  workflow_dispatch
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: 'Create pull request'
+          title: 'New pull request'
+          body: 'This is a new pull request. ${{ github.event.number }}'
+          branch: 'pre-prod'
+          base: 'main'
