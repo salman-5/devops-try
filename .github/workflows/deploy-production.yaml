@@ -1,15 +1,19 @@
-name: Pipeline Production
+name: Deployment to Production
 on:
   push:
     branches: 
       master
 jobs:
-  wait_for_merge:
+  deploy-to-production:
+    permissions:
+      id-token: write 
+      contents: read
     runs-on: ubuntu-latest
     environment: prod
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -25,17 +29,6 @@ jobs:
             salras/my-image:${{ github.sha }}
       - name: Push Docker Image to Docker Hub
         run: docker push salras/my-image
-  deploy-to-pre-prod:
-    needs: wait_for_merge
-    permissions:
-      id-token: write 
-      contents: read
-    runs-on: ubuntu-latest
-    environment: prod
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
