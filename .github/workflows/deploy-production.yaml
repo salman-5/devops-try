@@ -1,1 +1,47 @@
+name: Pipeline Production
+on:
+  push:
+    branches: 
+      master
+jobs:
+  wait_for_merge:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: |
+            salras/my-image:latest
+            salras/my-image:${{ github.sha }}
+      - name: Push Docker Image to Docker Hub
+        run: docker push salras/my-image
+  deploy-to-pre-prod:
+    needs: wait_for_merge
+    permissions:
+      id-token: write 
+      contents: read
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.READ_ROLE }}
+          aws-region: us-east-1
+      - name: Connect to EC2 instance
+        run: |
+            aws ssm send-command --document-name "AWS-RunShellScript" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["i-0e1e938e34e31d717"]}]' --parameters '{"workingDirectory":["/home/ubuntu"],"executionTimeout":["3600"],"commands":["#! /bin/bash","docker stop react-app","docker rm react-app","","docker rmi salras/my-image:latest","docker pull salras/my-image:latest","","docker run -t -d -p 80:80 --name react-app salras/my-image:latest"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --region us-east-1
 
