@@ -15,9 +15,9 @@ jobs:
             fetch-depth: '5'
       - name: Revert PR
         run: |
-          gh revert -m 1 HEAD
-          gh commit -m "${{ github.event.inputs.reason }}"
-          gh push 
+          git revert -m 1 HEAD
+          git commit -m "${{ github.event.inputs.reason }}"
+          git push 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
