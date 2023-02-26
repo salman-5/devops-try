@@ -18,7 +18,7 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
           git revert -m 1 HEAD
-          git commit --ammend -m "${{ github.event.inputs.reason }}"
+          git commit --amend -m "${{ github.event.inputs.reason }}"
           git push 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
