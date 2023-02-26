@@ -10,10 +10,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: '5'
-      - name: Rollback on failure
+            fetch-depth: '5'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git revert -m 1 --no-edit HEAD
-          git push
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+              git revert -m 1 --no-edit HEAD
+              git push
