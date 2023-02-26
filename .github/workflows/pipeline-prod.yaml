@@ -16,4 +16,4 @@ jobs:
           title: 'New pull request'
           body: 'This is a new pull request. ${{ github.event.number }}'
           branch: 'pre-prod'
-          base: 'main'
+          base: 'master'
