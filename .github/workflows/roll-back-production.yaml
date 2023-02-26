@@ -18,8 +18,10 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
           git revert -m 1 HEAD
-          git commit --amend -m "${{ github.event.inputs.reason }}"
-          git push 
+          git checkout -b revert-pull-${{ github.sha }}
+          git push origin revert-pull-${{ github.sha }}
+          gh pr create --title "Revert of ${{ github.sha }}" --body "${{ github.event.inputs.reason }}" --base master --head revert-pull-${{ github.sha }}
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
