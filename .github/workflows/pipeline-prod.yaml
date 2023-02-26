@@ -16,7 +16,7 @@ jobs:
       # Use the GitHub CLI to create a pull request
       - name: Create PR
         run: |
-          gh pr create -f -B main -H feature-branch -t "My Pull Request Title" -b "${{ github.event.inputs.message }}"
+          gh pr create --title "Add new feature" --body "${{ github.event.inputs.message }}" --base master --head pre-prod
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
