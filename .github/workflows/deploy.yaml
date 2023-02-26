@@ -2,7 +2,7 @@ name: Build Test & Deploy
 
 on:
   push:
-    branches: master
+    branches: pre-prod
 jobs:
   build-test:
     runs-on: ubuntu-latest
