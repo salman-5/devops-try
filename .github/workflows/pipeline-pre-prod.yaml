@@ -58,7 +58,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::352007290685:role/ECS
+          role-to-assume: ${{ secrets.ECS_ROLE }}
           aws-region: us-east-1  # Replace with your AWS region
       - name: Update ECS service
         run: |
